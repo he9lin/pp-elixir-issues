@@ -24,3 +24,4 @@ defmodule CliTest do
     assert parse_args(["user", "project"]) == { "user", "project", 4 }
   end
 end
+

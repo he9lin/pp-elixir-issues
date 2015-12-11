@@ -6,7 +6,7 @@ defmodule Issues.GithubIssues do
       |> HTTPoison.get(@user_agent)
       |> handle_response
       |> convert_to_list_of_hashdicts
-      |> sort_in_descending_order
+      |> sort_into_ascending_order
   end
 
   @github_url Application.get_env(:issues, :github_url)
@@ -27,11 +27,15 @@ defmodule Issues.GithubIssues do
   end
 
   def convert_to_list_of_hashdicts({:ok, list}) do
+    convert_to_list_of_hashdicts(list)
+  end
+
+  def convert_to_list_of_hashdicts(list) do
     list |> Enum.map(&Enum.into(&1, HashDict.new))
   end
 
-  def sort_in_descending_order(list) do
-    Enum.sort list, fn i1, i2 -> i1["created_at"] <= i2["created_at"] end
+  def sort_into_ascending_order(list) do
+    Enum.sort list, &(&1["created_at"] <= &2["created_at"])
   end
 end
 
